@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { isAuthenticated } from "../auth/auth";
+import { isAuthenticated } from "../auth/auth.ts"
 
 const PrivateRoute = ({ children }: { children: JSX.Element }) => {
   return isAuthenticated() ? children : <Navigate to="/" />;
