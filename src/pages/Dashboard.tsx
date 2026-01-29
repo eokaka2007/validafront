@@ -17,9 +17,7 @@ const Dashboard = () => {
     try {
       const response = await fetch("https://valida-proxy.onrender.com/filtro", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           documento: documento.replace(/\D/g, ""),
           tipo,
@@ -28,13 +26,8 @@ const Dashboard = () => {
         }),
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.erro || "Erro ao aplicar filtro");
-      }
-
-      setMsg("✅ Filtros aplicados! Atualize o relatório no botão do Power BI.");
+      if (!response.ok) throw new Error("Erro ao aplicar filtro");
+      setMsg("✅ Filtros aplicados! Atualize o BI.");
     } catch (err: any) {
       setMsg("❌ Erro: " + err.message);
     } finally {
@@ -43,34 +36,35 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
+    <div style={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden", backgroundColor: "#1e1e1e", color: "#fff" }}>
       
-      {/* COLUNA DA ESQUERDA: Filtros */}
+      {/* SIDEBAR DE FILTROS (ESTILO ANTIGO) */}
       <div style={{ 
-        width: "350px", 
+        width: "320px", 
+        minWidth: "320px",
         padding: "30px", 
-        borderRight: "1px solid #ddd", 
-        backgroundColor: "#f9f9f9",
+        borderRight: "1px solid #333", 
         display: "flex",
         flexDirection: "column",
-        gap: "15px"
+        gap: "20px",
+        boxShadow: "2px 0 10px rgba(0,0,0,0.5)"
       }}>
-        <h2 style={{ marginBottom: 10 }}>Filtros do BI</h2>
+        <h2 style={{ fontSize: "20px", margin: "0 0 10px 0" }}>Filtros do BI</h2>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label>CNPJ / CPF</label>
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "14px" }}>CNPJ / CPF</label>
           <input
-            style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }}
             value={documento}
             onChange={(e) => setDocumento(e.target.value)}
             placeholder="Somente números"
           />
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label>Tipo</label>
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "14px" }}>Tipo</label>
           <select 
-            style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }}
             value={tipo} 
             onChange={(e) => setTipo(e.target.value as any)}
           >
@@ -79,23 +73,19 @@ const Dashboard = () => {
           </select>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label>Data inicial</label>
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "14px" }}>Data inicial</label>
           <input 
-            style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
-            type="date" 
-            value={dtInicial} 
-            onChange={(e) => setDtInicial(e.target.value)} 
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }}
+            type="date" value={dtInicial} onChange={(e) => setDtInicial(e.target.value)} 
           />
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <label>Data final</label>
+        <div>
+          <label style={{ display: "block", marginBottom: "5px", fontSize: "14px" }}>Data final</label>
           <input 
-            style={{ padding: "10px", borderRadius: "4px", border: "1px solid #ccc" }}
-            type="date" 
-            value={dtFinal} 
-            onChange={(e) => setDtFinal(e.target.value)} 
+            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }}
+            type="date" value={dtFinal} onChange={(e) => setDtFinal(e.target.value)} 
           />
         </div>
 
@@ -105,37 +95,33 @@ const Dashboard = () => {
           style={{
             padding: "15px",
             backgroundColor: "#007bff",
-            color: "white",
+            color: "#fff",
             border: "none",
             borderRadius: "4px",
             fontWeight: "bold",
-            cursor: loading ? "not-allowed" : "pointer"
+            cursor: "pointer",
+            transition: "0.3s"
           }}
         >
-          {loading ? "Aplicando..." : "APLICAR FILTROS"}
+          {loading ? "PROCESSANDO..." : "APLICAR FILTROS"}
         </button>
 
-        {msg && (
-          <p style={{ 
-            fontSize: "14px", 
-            color: msg.includes("✅") ? "green" : "red", 
-            fontWeight: "bold",
-            backgroundColor: "#fff",
-            padding: "10px",
-            borderRadius: "4px",
-            border: "1px solid #eee"
-          }}>
-            {msg}
-          </p>
-        )}
+        {msg && <p style={{ fontSize: "13px", color: msg.includes("✅") ? "#4caf50" : "#ff5252" }}>{msg}</p>}
       </div>
 
-      {/* COLUNA DA DIREITA: Power BI */}
-      <div style={{ flex: 1, backgroundColor: "#eee", position: "relative" }}>
+      {/* ÁREA DO POWER BI (OCUPA O RESTO) */}
+      <div style={{ flex: 1, overflow: "auto", position: "relative", backgroundColor: "#000" }}>
         <iframe
           title="Mercado Abilhão"
           src={urlBI}
-          style={{ width: "100%", height: "100%", border: "none" }}
+          style={{ 
+            width: "3940px", // Tamanho real da sua imagem
+            height: "2300px", // Tamanho real da sua imagem
+            border: "none",
+            transformOrigin: "0 0",
+            // Opcional: use zoom para caber na tela se não quiser scroll
+            // zoom: "0.4" 
+          }}
           allowFullScreen={true}
         ></iframe>
       </div>
