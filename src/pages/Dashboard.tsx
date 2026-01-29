@@ -8,13 +8,12 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
 
-  // Sua URL do Power BI - Mantendo os parâmetros de autenticação
-  const urlBI = "https://app.powerbi.com/reportEmbed?reportId=44029358-a74c-43ff-b041-0a01877077e3&autoAuth=true&ctid=7b8228c2-911b-4b3d-bca2-bb42add6ec41";
+  // URL com comandos para mostrar navegação e filtros
+  const urlBI = "https://app.powerbi.com/reportEmbed?reportId=44029358-a74c-43ff-b041-0a01877077e3&autoAuth=true&ctid=7b8228c2-911b-4b3d-bca2-bb42add6ec41&navContentPaneEnabled=1&filterPaneEnabled=1";
 
   const aplicarFiltro = async () => {
     setLoading(true);
     setMsg("");
-
     try {
       const response = await fetch("https://valida-proxy.onrender.com/filtro", {
         method: "POST",
@@ -26,10 +25,8 @@ const Dashboard = () => {
           dtfinal: dtFinal,
         }),
       });
-
       if (!response.ok) throw new Error("Erro ao salvar filtros");
-
-      setMsg("✅ Filtros salvos! Agora, clique em 'Atualizar' na barra superior do BI.");
+      setMsg("✅ Filtros salvos! Agora use o botão de atualizar no topo do BI.");
     } catch (err: any) {
       setMsg("❌ Erro: " + err.message);
     } finally {
@@ -40,7 +37,7 @@ const Dashboard = () => {
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden", backgroundColor: "#1e1e1e" }}>
       
-      {/* SIDEBAR DE FILTROS - Estilo Escuro conforme suas imagens */}
+      {/* SIDEBAR DE FILTROS */}
       <div style={{ 
         width: "300px", 
         minWidth: "300px",
@@ -49,10 +46,11 @@ const Dashboard = () => {
         display: "flex",
         flexDirection: "column",
         gap: "20px",
-        color: "#fff"
+        color: "#fff",
+        zIndex: 10
       }}>
-        <h2 style={{ fontSize: "1.2rem", margin: "0 0 10px 0" }}>Filtros do BI</h2>
-
+        <h2 style={{ fontSize: "1.2rem", margin: "0" }}>Filtros do BI</h2>
+        
         <div>
           <label style={{ fontSize: "12px", display: "block", marginBottom: "5px" }}>CNPJ / CPF</label>
           <input
@@ -61,18 +59,6 @@ const Dashboard = () => {
             onChange={(e) => setDocumento(e.target.value)}
             placeholder="Somente números"
           />
-        </div>
-
-        <div>
-          <label style={{ fontSize: "12px", display: "block", marginBottom: "5px" }}>Tipo</label>
-          <select 
-            style={{ width: "100%", padding: "10px", borderRadius: "4px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }}
-            value={tipo} 
-            onChange={(e) => setTipo(e.target.value as any)}
-          >
-            <option value="cnpj">CNPJ</option>
-            <option value="cpf">CPF</option>
-          </select>
         </div>
 
         <div style={{ display: "flex", gap: "10px" }}>
@@ -97,15 +83,23 @@ const Dashboard = () => {
         {msg && <p style={{ fontSize: "13px", color: msg.includes("✅") ? "#4caf50" : "#ff5252" }}>{msg}</p>}
       </div>
 
-      {/* ÁREA DO POWER BI - Garantindo que a barra superior apareça */}
-      <div style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* ÁREA DO BI COM REDUÇÃO DE ESCALA */}
+      <div style={{ 
+        flex: 1, 
+        backgroundColor: "#f4f4f4", 
+        position: "relative",
+        overflow: "hidden" 
+      }}>
         <iframe
           title="Mercado Abilhão"
           src={urlBI}
           style={{ 
             width: "100%", 
             height: "100%", 
-            border: "none"
+            border: "none",
+            position: "absolute",
+            top: 0,
+            left: 0
           }}
           allowFullScreen={true}
         ></iframe>
