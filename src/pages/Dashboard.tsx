@@ -35,14 +35,31 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden", backgroundColor: "#1e1e1e", color: "#fff", fontFamily: "sans-serif" }}>
+    <div style={{ 
+      display: "flex", 
+      height: "100vh", 
+      width: "100vw", 
+      overflow: "hidden", 
+      backgroundColor: "#1e1e1e", 
+      color: "#fff", 
+      fontFamily: "sans-serif" 
+    }}>
       
-      {/* SIDEBAR */}
-      <div style={{ 
-        width: "300px", minWidth: "300px", padding: "20px", borderRight: "1px solid #333", 
-        display: "flex", flexDirection: "column", gap: "20px", boxShadow: "4px 0 10px rgba(0,0,0,0.5)", zIndex: 10 
+      {/* SIDEBAR - Largura fixa e scroll interno se necessário */}
+      <aside style={{ 
+        width: "320px", 
+        minWidth: "320px", 
+        height: "100%",
+        padding: "25px", 
+        borderRight: "1px solid #333", 
+        display: "flex", 
+        flexDirection: "column", 
+        gap: "20px", 
+        boxShadow: "10px 0 15px rgba(0,0,0,0.3)",
+        zIndex: 10,
+        overflowY: "auto"
       }}>
-        <h2 style={{ fontSize: "1.4rem", fontWeight: "bold", marginBottom: "10px" }}>Filtros do BI</h2>
+        <h2 style={{ fontSize: "1.4rem", fontWeight: "bold", marginBottom: "10px", color: "#007bff" }}>Filtros do BI</h2>
 
         <div>
           <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "8px" }}>CNPJ / CPF</label>
@@ -66,55 +83,65 @@ const Dashboard = () => {
           </select>
         </div>
 
-        <div style={{ display: "flex", gap: "10px" }}>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontSize: "12px", color: "#aaa" }}>Data Inicial</label>
+        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+          <div>
+            <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "5px" }}>Data Inicial</label>
             <input style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }} type="date" value={dtInicial} onChange={(e) => setDtInicial(e.target.value)} />
           </div>
-          <div style={{ flex: 1 }}>
-            <label style={{ fontSize: "12px", color: "#aaa" }}>Data Final</label>
+          <div>
+            <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "5px" }}>Data Final</label>
             <input style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }} type="date" value={dtFinal} onChange={(e) => setDtFinal(e.target.value)} />
           </div>
         </div>
 
-        {/* BOTÃO PRINCIPAL */}
-        <button 
-          onClick={aplicarFiltro} 
-          disabled={loading}
-          style={{
-            padding: "15px", backgroundColor: "#007bff", color: "#fff", border: "none", 
-            borderRadius: "6px", fontWeight: "bold", cursor: "pointer", transition: "0.3s",
-            boxShadow: "0 4px 15px rgba(0, 123, 255, 0.3)"
-          }}
-        >
-          {loading ? "Processando..." : "APLICAR FILTROS"}
-        </button>
+        <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: "10px" }}>
+          <button 
+            onClick={aplicarFiltro} 
+            disabled={loading}
+            style={{
+              padding: "15px", backgroundColor: "#007bff", color: "#fff", border: "none", 
+              borderRadius: "6px", fontWeight: "bold", cursor: "pointer", transition: "0.2s",
+            }}
+          >
+            {loading ? "Processando..." : "APLICAR FILTROS"}
+          </button>
 
-        {/* BOTÃO DE RECARREGAR ESTILIZADO */}
-        <button 
-          onClick={() => setRefreshKey(prev => prev + 1)}
-          style={{
-            padding: "12px", backgroundColor: "transparent", color: "#007bff", 
-            border: "2px solid #007bff", borderRadius: "6px", fontWeight: "bold", 
-            cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px"
-          }}
-        >
-          🔄 RECARREGAR RELATÓRIO
-        </button>
+          <button 
+            onClick={() => setRefreshKey(prev => prev + 1)}
+            style={{
+              padding: "12px", backgroundColor: "transparent", color: "#007bff", 
+              border: "2px solid #007bff", borderRadius: "6px", fontWeight: "bold", 
+              cursor: "pointer"
+            }}
+          >
+            🔄 RECARREGAR RELATÓRIO
+          </button>
+          
+          {msg && <p style={{ fontSize: "13px", textAlign: "center", color: msg.includes("✅") ? "#4caf50" : "#ff5252", margin: "10px 0 0 0" }}>{msg}</p>}
+        </div>
+      </aside>
 
-        {msg && <p style={{ fontSize: "14px", fontWeight: "500", textAlign: "center", color: msg.includes("✅") ? "#4caf50" : "#ff5252" }}>{msg}</p>}
-      </div>
-
-      {/* ÁREA DO BI */}
-      <div style={{ flex: 1, backgroundColor: "#000", position: "relative" }}>
+      {/* ÁREA DO BI - Ocupa todo o espaço restante */}
+      <main style={{ 
+        flex: 1, 
+        backgroundColor: "#000", 
+        height: "100%",
+        display: "flex",
+        flexDirection: "column"
+      }}>
         <iframe
           key={refreshKey}
           title="Mercado Abilhão"
           src={urlBI}
-          style={{ width: "100%", height: "100%", border: "none" }}
+          style={{ 
+            width: "100%", 
+            height: "100%", 
+            border: "none" 
+          }}
           allowFullScreen={true}
         ></iframe>
-      </div>
+      </main>
+
     </div>
   );
 };
