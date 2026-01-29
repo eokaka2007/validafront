@@ -36,71 +36,59 @@ const Dashboard = () => {
 
   return (
     <div style={{ 
-      display: "flex", 
-      height: "100vh", 
-      width: "100vw", 
-      overflow: "hidden", 
-      backgroundColor: "#1e1e1e", 
-      color: "#fff", 
-      fontFamily: "sans-serif" 
+      display: "flex", height: "100vh", width: "100vw", overflow: "hidden", 
+      backgroundColor: "#0d1117", color: "#fff", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" 
     }}>
       
-      {/* SIDEBAR - Largura fixa e scroll interno se necessário */}
+      {/* SIDEBAR COMPACTA */}
       <aside style={{ 
-        width: "320px", 
-        minWidth: "320px", 
-        height: "100%",
-        padding: "25px", 
-        borderRight: "1px solid #333", 
-        display: "flex", 
-        flexDirection: "column", 
-        gap: "20px", 
-        boxShadow: "10px 0 15px rgba(0,0,0,0.3)",
-        zIndex: 10,
-        overflowY: "auto"
+        width: "260px", minWidth: "260px", height: "100%", padding: "18px", 
+        borderRight: "1px solid #30363d", display: "flex", flexDirection: "column", 
+        gap: "14px", backgroundColor: "#161b22", zIndex: 10
       }}>
-        <h2 style={{ fontSize: "1.4rem", fontWeight: "bold", marginBottom: "10px", color: "#007bff" }}>Filtros do BI</h2>
+        <h2 style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#58a6ff", marginBottom: "5px" }}>Filtros do BI</h2>
 
-        <div>
-          <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "8px" }}>CNPJ / CPF</label>
-          <input
-            style={{ width: "100%", padding: "12px", borderRadius: "6px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff", outline: "none" }}
-            value={documento}
-            onChange={(e) => setDocumento(e.target.value)}
-            placeholder="Somente números"
-          />
-        </div>
-
-        <div>
-          <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "8px" }}>Tipo</label>
-          <select 
-            style={{ width: "100%", padding: "12px", borderRadius: "6px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }}
-            value={tipo} 
-            onChange={(e) => setTipo(e.target.value as any)}
-          >
-            <option value="cnpj">CNPJ</option>
-            <option value="cpf">CPF</option>
-          </select>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
           <div>
-            <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "5px" }}>Data Inicial</label>
-            <input style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }} type="date" value={dtInicial} onChange={(e) => setDtInicial(e.target.value)} />
+            <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>CNPJ / CPF</label>
+            <input
+              style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "13px" }}
+              value={documento}
+              onChange={(e) => setDocumento(e.target.value)}
+              placeholder="00.000.000/0000-00"
+            />
           </div>
+
           <div>
-            <label style={{ fontSize: "12px", color: "#aaa", display: "block", marginBottom: "5px" }}>Data Final</label>
-            <input style={{ width: "100%", padding: "10px", borderRadius: "6px", border: "1px solid #444", backgroundColor: "#2d2d2d", color: "#fff" }} type="date" value={dtFinal} onChange={(e) => setDtFinal(e.target.value)} />
+            <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Tipo</label>
+            <select 
+              style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "13px" }}
+              value={tipo} 
+              onChange={(e) => setTipo(e.target.value as any)}
+            >
+              <option value="cnpj">CNPJ</option>
+              <option value="cpf">CPF</option>
+            </select>
+          </div>
+
+          <div>
+            <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Data Inicial</label>
+            <input style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "12px" }} type="date" value={dtInicial} onChange={(e) => setDtInicial(e.target.value)} />
+          </div>
+
+          <div>
+            <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Data Final</label>
+            <input style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "12px" }} type="date" value={dtFinal} onChange={(e) => setDtFinal(e.target.value)} />
           </div>
         </div>
 
-        <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: "10px" }}>
+        <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: "8px" }}>
           <button 
             onClick={aplicarFiltro} 
             disabled={loading}
             style={{
-              padding: "15px", backgroundColor: "#007bff", color: "#fff", border: "none", 
-              borderRadius: "6px", fontWeight: "bold", cursor: "pointer", transition: "0.2s",
+              padding: "10px", backgroundColor: "#1f6feb", color: "#fff", border: "none", 
+              borderRadius: "6px", fontWeight: "600", cursor: "pointer", fontSize: "13px"
             }}
           >
             {loading ? "Processando..." : "APLICAR FILTROS"}
@@ -109,35 +97,30 @@ const Dashboard = () => {
           <button 
             onClick={() => setRefreshKey(prev => prev + 1)}
             style={{
-              padding: "12px", backgroundColor: "transparent", color: "#007bff", 
-              border: "2px solid #007bff", borderRadius: "6px", fontWeight: "bold", 
-              cursor: "pointer"
+              padding: "8px", backgroundColor: "transparent", color: "#58a6ff", 
+              border: "1px solid #58a6ff", borderRadius: "6px", fontWeight: "600", 
+              cursor: "pointer", fontSize: "12px"
             }}
           >
             🔄 RECARREGAR RELATÓRIO
           </button>
           
-          {msg && <p style={{ fontSize: "13px", textAlign: "center", color: msg.includes("✅") ? "#4caf50" : "#ff5252", margin: "10px 0 0 0" }}>{msg}</p>}
+          {msg && <p style={{ fontSize: "12px", textAlign: "center", color: msg.includes("✅") ? "#3fb950" : "#f85149", margin: "5px 0" }}>{msg}</p>}
         </div>
       </aside>
 
-      {/* ÁREA DO BI - Ocupa todo o espaço restante */}
+      {/* ÁREA DO BI - Fundo combinando com o relatório */}
       <main style={{ 
         flex: 1, 
-        backgroundColor: "#000", 
+        backgroundColor: "#0b2c3d", // Azul escuro combinando com o topo do seu BI
         height: "100%",
-        display: "flex",
-        flexDirection: "column"
+        display: "flex"
       }}>
         <iframe
           key={refreshKey}
           title="Mercado Abilhão"
           src={urlBI}
-          style={{ 
-            width: "100%", 
-            height: "100%", 
-            border: "none" 
-          }}
+          style={{ width: "100%", height: "100%", border: "none" }}
           allowFullScreen={true}
         ></iframe>
       </main>
