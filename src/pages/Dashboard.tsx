@@ -37,32 +37,33 @@ const Dashboard = () => {
   return (
     <div style={{ 
       display: "flex", height: "100vh", width: "100vw", overflow: "hidden", 
-      backgroundColor: "#0d1117", color: "#fff", fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif" 
+      backgroundColor: "#0d1117", color: "#fff", fontFamily: "'Segoe UI', system-ui, sans-serif" 
     }}>
       
-      {/* SIDEBAR COMPACTA */}
+      {/* SIDEBAR REFINADA */}
       <aside style={{ 
-        width: "260px", minWidth: "260px", height: "100%", padding: "18px", 
+        width: "240px", minWidth: "240px", height: "100%", padding: "20px", 
         borderRight: "1px solid #30363d", display: "flex", flexDirection: "column", 
-        gap: "14px", backgroundColor: "#161b22", zIndex: 10
+        backgroundColor: "#161b22", zIndex: 10
       }}>
-        <h2 style={{ fontSize: "1.1rem", fontWeight: "bold", color: "#58a6ff", marginBottom: "5px" }}>Filtros do BI</h2>
+        <h2 style={{ fontSize: "1.2rem", fontWeight: "600", color: "#58a6ff", marginBottom: "20px" }}>Filtros do BI</h2>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <div>
+        {/* ÁREA DE INPUTS */}
+        <div style={{ display: "flex", flexDirection: "column", gap: "12px", flex: 1 }}>
+          <div style={{ marginBottom: "5px" }}>
             <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>CNPJ / CPF</label>
             <input
-              style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "13px" }}
+              style={{ width: "100%", padding: "8px 10px", borderRadius: "6px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "13px", outline: "none" }}
               value={documento}
               onChange={(e) => setDocumento(e.target.value)}
               placeholder="00.000.000/0000-00"
             />
           </div>
 
-          <div>
+          <div style={{ marginBottom: "5px" }}>
             <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Tipo</label>
             <select 
-              style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "13px" }}
+              style={{ width: "100%", padding: "8px", borderRadius: "6px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "13px", cursor: "pointer" }}
               value={tipo} 
               onChange={(e) => setTipo(e.target.value as any)}
             >
@@ -71,24 +72,27 @@ const Dashboard = () => {
             </select>
           </div>
 
-          <div>
-            <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Data Inicial</label>
-            <input style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "12px" }} type="date" value={dtInicial} onChange={(e) => setDtInicial(e.target.value)} />
-          </div>
-
-          <div>
-            <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Data Final</label>
-            <input style={{ width: "100%", padding: "8px", borderRadius: "4px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "12px" }} type="date" value={dtFinal} onChange={(e) => setDtFinal(e.target.value)} />
+          <div style={{ display: "flex", gap: "8px" }}>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Inicial</label>
+              <input style={{ width: "100%", padding: "7px", borderRadius: "6px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "11px" }} type="date" value={dtInicial} onChange={(e) => setDtInicial(e.target.value)} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontSize: "11px", color: "#8b949e", display: "block", marginBottom: "4px" }}>Final</label>
+              <input style={{ width: "100%", padding: "7px", borderRadius: "6px", border: "1px solid #30363d", backgroundColor: "#0d1117", color: "#fff", fontSize: "11px" }} type="date" value={dtFinal} onChange={(e) => setDtFinal(e.target.value)} />
+            </div>
           </div>
         </div>
 
-        <div style={{ marginTop: "auto", display: "flex", flexDirection: "column", gap: "8px" }}>
+        {/* RODAPÉ DA SIDEBAR COM BOTÕES AJUSTADOS */}
+        <div style={{ borderTop: "1px solid #30363d", paddingTop: "20px", display: "flex", flexDirection: "column", gap: "10px" }}>
           <button 
             onClick={aplicarFiltro} 
             disabled={loading}
             style={{
-              padding: "10px", backgroundColor: "#1f6feb", color: "#fff", border: "none", 
-              borderRadius: "6px", fontWeight: "600", cursor: "pointer", fontSize: "13px"
+              padding: "12px", backgroundColor: "#1f6feb", color: "#fff", border: "none", 
+              borderRadius: "6px", fontWeight: "600", cursor: "pointer", fontSize: "13px",
+              transition: "background 0.2s"
             }}
           >
             {loading ? "Processando..." : "APLICAR FILTROS"}
@@ -97,25 +101,20 @@ const Dashboard = () => {
           <button 
             onClick={() => setRefreshKey(prev => prev + 1)}
             style={{
-              padding: "8px", backgroundColor: "transparent", color: "#58a6ff", 
-              border: "1px solid #58a6ff", borderRadius: "6px", fontWeight: "600", 
-              cursor: "pointer", fontSize: "12px"
+              padding: "10px", backgroundColor: "transparent", color: "#58a6ff", 
+              border: "1px solid #30363d", borderRadius: "6px", fontWeight: "600", 
+              cursor: "pointer", fontSize: "12px", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px"
             }}
           >
-            🔄 RECARREGAR RELATÓRIO
+            🔄 Recarregar Relatório
           </button>
           
-          {msg && <p style={{ fontSize: "12px", textAlign: "center", color: msg.includes("✅") ? "#3fb950" : "#f85149", margin: "5px 0" }}>{msg}</p>}
+          {msg && <p style={{ fontSize: "12px", textAlign: "center", color: msg.includes("✅") ? "#3fb950" : "#f85149", marginTop: "5px" }}>{msg}</p>}
         </div>
       </aside>
 
-      {/* ÁREA DO BI - Fundo combinando com o relatório */}
-      <main style={{ 
-        flex: 1, 
-        backgroundColor: "#0b2c3d", // Azul escuro combinando com o topo do seu BI
-        height: "100%",
-        display: "flex"
-      }}>
+      {/* ÁREA DO BI - FLUIDA */}
+      <main style={{ flex: 1, backgroundColor: "#000", position: "relative" }}>
         <iframe
           key={refreshKey}
           title="Mercado Abilhão"
