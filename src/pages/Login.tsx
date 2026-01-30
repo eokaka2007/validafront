@@ -1,135 +1,160 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
-import { Eye, EyeOff, Lock, User } from 'lucide-react';
+import { useState } from "react";
 
-const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+const Login = ({ onLogin }: { onLogin: () => void }) => {
+  const [user, setUser] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const { login } = useAuth();
-  const { toast } = useToast();
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    const success = login(username.toUpperCase(), password);
-
-    if (success) {
-      toast({
-        title: "Login realizado com sucesso!",
-        description: "Somos a Unica"
-      });
-      navigate('/');
+    if (user === "admin" && password === "123456") {
+      localStorage.setItem("auth", "true");
+      onLogin();
     } else {
-      toast({
-        title: "Erro no login",
-        description: "Usuário ou senha incorretos",
-        variant: "destructive"
-      });
+      setError("Usuário ou senha inválidos");
     }
-    setIsLoading(false);
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+    <div
       style={{
+        height: "100vh",
+        width: "100vw",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
         backgroundColor: "#01222e",
         backgroundImage: `url("/3d-render-abstract-technology-with-flowing-particles.jpg")`,
         backgroundSize: "cover",
         backgroundPosition: "center",
+        position: "relative",
       }}
     >
       {/* Overlay de blur */}
-      <div className="absolute inset-0 backdrop-blur-sm bg-[#01222e]/30 z-0"></div>
+      <div
+        style={{
+          position: "absolute",
+          inset: 0,
+          backdropFilter: "blur(6px)",
+          backgroundColor: "rgba(1, 34, 46, 0.4)",
+          zIndex: 0,
+        }}
+      ></div>
 
-      <Card className="w-full max-w-md relative z-10 bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl shadow-apple-elevated">
-        <CardHeader className="text-center pb-4">
-          <CardTitle className="text-3xl font-bold text-[#1ad3a9]">
-            Hub DIMEG
-          </CardTitle>
-          <CardDescription className="text-muted-foreground text-lg">
-            Portal de Relatorios
-          </CardDescription>
-        </CardHeader>
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          position: "relative",
+          zIndex: 10,
+          width: 350,
+          padding: "40px 30px",
+          borderRadius: 20,
+          backgroundColor: "rgba(255,255,255,0.05)", // vidro transparente
+          boxShadow: "0 8px 32px rgba(0, 0, 0, 0.25)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255,255,255,0.15)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <h2 style={{ color: "#1ad3a9", fontSize: "1.8rem", marginBottom: 20, fontWeight: 600 }}>
+          Hub DIMEG
+        </h2>
 
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <User className="h-4 w-4 text-[#1ad3a9]" />
-                Usuário
-              </Label>
-              <Input 
-                id="username"
-                placeholder="Digite seu usuário"
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                required
-                className="h-14 text-base bg-[#01222e]/30 backdrop-blur-sm border-2 border-white/10 rounded-2xl px-6 py-4 focus:border-[#1ad3a9]/50 focus:ring-0 transition-all duration-300 shadow-apple-button hover:shadow-apple-elevated"
-              />
-            </div>
+        {error && (
+          <p style={{ color: "#ff4d4f", marginBottom: 15, fontSize: "0.9rem", textAlign: "center" }}>
+            {error}
+          </p>
+        )}
 
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <Lock className="h-4 w-4 text-[#1ad3a9]" />
-                Senha
-              </Label>
-              <div className="relative">
-                <Input 
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Digite sua senha"
-                  value={password}
-                  onChange={e => setPassword(e.target.value)}
-                  required
-                  className="h-14 text-base bg-[#01222e]/30 backdrop-blur-sm border-2 border-white/10 rounded-2xl px-6 py-4 pr-14 focus:border-[#1ad3a9]/50 focus:ring-0 transition-all duration-300 shadow-apple-button hover:shadow-apple-elevated"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-[#1ad3a9] transition-colors duration-200"
-                >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
-                </button>
-              </div>
-              <p className="text-xs text-muted-foreground/80 select-none pl-2">
-                Utilize suas credenciais cadastradas no sistema
-              </p>
-            </div>
+        <div style={{ width: "100%", marginBottom: 15 }}>
+          <input
+            type="text"
+            placeholder="Usuário"
+            value={user}
+            onChange={(e) => setUser(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "12px 15px",
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,0.25)",
+              backgroundColor: "rgba(255,255,255,0.1)",
+              color: "#fff",
+              fontSize: 14,
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
+        </div>
 
-            <Button 
-              type="submit"
-              disabled={isLoading}
-              className="w-full h-14 text-lg font-semibold rounded-2xl bg-[#1ad3a9] text-[#01222e] shadow-apple-button hover:shadow-apple-elevated transition-all duration-300 disabled:opacity-50"
-            >
-              {isLoading ? (
-                <div className="flex items-center gap-2 justify-center">
-                  <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  Entrando...
-                </div>
-              ) : (
-                "Entrar"
-              )}
-            </Button>
-          </form>
+        <div style={{ width: "100%", marginBottom: 20, position: "relative" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Senha"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "12px 45px 12px 15px",
+              borderRadius: 12,
+              border: "1px solid rgba(255,255,255,0.25)",
+              backgroundColor: "rgba(255,255,255,0.1)",
+              color: "#fff",
+              fontSize: 14,
+              outline: "none",
+              boxSizing: "border-box",
+            }}
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              right: 12,
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              color: "#1ad3a9",
+              cursor: "pointer",
+            }}
+          >
+            {showPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
 
-          <div className="mt-6 p-4 bg-gradient-flow rounded-2xl border border-white/10">
-            <p className="text-sm text-center text-muted-foreground">
-              Sistema desenvolvido para relatorios Unica SOlucoes 
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+        <button
+          type="submit"
+          style={{
+            width: "100%",
+            padding: 12,
+            borderRadius: 12,
+            border: "none",
+            backgroundColor: "#1ad3a9",
+            color: "#01222e",
+            fontWeight: "bold",
+            fontSize: 14,
+            cursor: "pointer",
+            transition: "all 0.3s ease",
+          }}
+        >
+          Entrar
+        </button>
+
+        <p
+          style={{
+            marginTop: 20,
+            fontSize: 12,
+            color: "rgba(255,255,255,0.7)",
+            textAlign: "center",
+          }}
+        >
+          Sistema desenvolvido para otimização dos relatorios
+        </p>
+      </form>
     </div>
   );
 };
