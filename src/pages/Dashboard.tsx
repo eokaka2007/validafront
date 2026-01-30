@@ -9,12 +9,8 @@ const Dashboard = () => {
   const [msg, setMsg] = useState("");
   const [refreshKey, setRefreshKey] = useState(0);
 
-  /**
-   * AJUSTE NA URL: 
-   * Certifique-se de que a URL termina com "&navContentPaneEnabled=true" 
-   * e NÃO contém "&filterPaneEnabled=false" se quiser ver todas as opções nativas.
-   */
-  const urlBI = "https://app.powerbi.com/reportEmbed?reportId=44029358-a74c-43ff-b041-0a01877077e3&autoAuth=true&ctid=7b8228c2-911b-4b3d-bca2-bb42add6ec41&navContentPaneEnabled=true";
+  // URL atualizada com actionBarEnabled=true para mostrar os botões superiores
+  const urlBI = "https://app.powerbi.com/reportEmbed?reportId=44029358-a74c-43ff-b041-0a01877077e3&autoAuth=true&ctid=7b8228c2-911b-4b3d-bca2-bb42add6ec41&actionBarEnabled=true";
 
   const aplicarFiltro = async () => {
     setLoading(true);
@@ -48,7 +44,7 @@ const Dashboard = () => {
       backgroundColor: "#0d1117" 
     }}>
       
-      {/* SIDEBAR FIXA */}
+      {/* SIDEBAR */}
       <aside style={{ 
         width: "260px", 
         minWidth: "260px", 
@@ -107,33 +103,14 @@ const Dashboard = () => {
           <button 
             onClick={aplicarFiltro} 
             disabled={loading}
-            style={{ 
-              padding: "12px", 
-              backgroundColor: "#1f6feb", 
-              color: "#fff", 
-              border: "none", 
-              borderRadius: "6px", 
-              fontWeight: "bold", 
-              cursor: "pointer",
-              fontSize: "13px"
-            }}
+            style={{ padding: "12px", backgroundColor: "#1f6feb", color: "#fff", border: "none", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", fontSize: "13px" }}
           >
             {loading ? "Processando..." : "APLICAR FILTROS"}
           </button>
 
           <button 
             onClick={() => setRefreshKey(prev => prev + 1)}
-            style={{ 
-              padding: "10px", 
-              backgroundColor: "transparent", 
-              color: "#58a6ff", 
-              border: "1px solid #30363d", 
-              borderRadius: "6px", 
-              fontWeight: "bold", 
-              cursor: "pointer", 
-              fontSize: "12px",
-              marginTop: "4px"
-            }}
+            style={{ padding: "10px", backgroundColor: "transparent", color: "#58a6ff", border: "1px solid #30363d", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", fontSize: "12px", marginTop: "4px" }}
           >
             🔄 Recarregar Relatório
           </button>
@@ -146,20 +123,19 @@ const Dashboard = () => {
       <main style={{ 
         flex: 1, 
         height: "100%", 
-        backgroundColor: "#f0f2f5", // Fundo levemente cinza para destacar a barra branca do BI
-        padding: "0", 
-        boxSizing: "border-box",
+        backgroundColor: "#fff", // Fundo branco para não contrastar com a barra do Power BI
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        overflow: "hidden"
       }}>
         <iframe
           key={refreshKey}
-          title="Relatório Única"
+          title="Mercado Abilhão"
           src={urlBI}
           style={{ 
             width: "100%", 
             height: "100%", 
-            border: "none",
+            border: "none"
           }}
           allowFullScreen={true}
         ></iframe>
