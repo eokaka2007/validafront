@@ -112,7 +112,7 @@ const Dashboard = () => {
             onClick={() => setRefreshKey(prev => prev + 1)}
             style={{ padding: "10px", backgroundColor: "transparent", color: "#58a6ff", border: "1px solid #30363d", borderRadius: "6px", fontWeight: "bold", cursor: "pointer", fontSize: "12px", marginTop: "4px" }}
           >
-            🔄 Recarregar Relatório
+            🔄 Recarregar e Atualizar PBIX
           </button>
           
           {msg && <p style={{ fontSize: "12px", textAlign: "center", color: msg.includes("✅") ? "#3fb950" : "#f85149", margin: "10px 0 0 0" }}>{msg}</p>}
