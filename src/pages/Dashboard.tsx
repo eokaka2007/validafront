@@ -10,22 +10,26 @@ const Dashboard = () => {
   const [refreshKey, setRefreshKey] = useState(0);
   const [progress, setProgress] = useState(0);
 
-  // URLs
-  const urlBI = "https://app.powerbi.com/reportEmbed?reportId=44029358-a74c-43ff-b041-0a01877077e3&autoAuth=true&ctid=7b8228c2-911b-4b3d-bca2-bb42add6ec41&actionBarEnabled=true";
+  // URL ATUALIZADA: Mercado Abilhão
+  const urlBI = "https://app.powerbi.com/view?r=eyJrIjoiMGZhOGJiZGEtOGEyZi00ZDBjLWI5YmQtOTA4OGE5Y2QxNDgwIiwidCI6IjdiODIyOGMyLTkxMWItNGIzZC1iY2EyLWJiNDJhZGQ2ZWM0MSJ9&pageName=0dcf58f005625d83d821";
   
   const urlAutomate = "https://default7b8228c2911b4b3dbca2bb42add6ec.41.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/2f97c85812e84355ae60b53d73ad420d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=SMOi--lPXC-jaAlz8m70s3iTgtHn4Bq01xwg-ihBb_s";
 
   const startProgress = () => {
     setProgress(0);
+    const totalTime = 120000; // 2 minutos exatos
+    const intervalTime = 1000; 
+    const increment = 100 / (totalTime / intervalTime);
+
     const interval = setInterval(() => {
       setProgress((prev) => {
-        if (prev >= 95) {
+        if (prev >= 99) {
           clearInterval(interval);
-          return prev;
+          return 99;
         }
-        return prev + 5;
+        return prev + increment;
       });
-    }, 200);
+    }, intervalTime);
     return interval;
   };
 
@@ -54,7 +58,7 @@ const Dashboard = () => {
 
   const atualizarEPowerAutomate = async () => {
     setLoading(true);
-    setMsg("⏳ Sincronizando dados...");
+    setMsg("⏳ Sincronizando dados (Aprox. 2 min)...");
     const progressInterval = startProgress();
 
     try {
@@ -65,14 +69,15 @@ const Dashboard = () => {
         body: JSON.stringify({})
       });
 
+      // Aguarda os 2 minutos (120000ms)
       setTimeout(() => {
         clearInterval(progressInterval);
         setProgress(100);
         setRefreshKey(prev => prev + 1);
-        setMsg("✅ Relatório atualizado!");
+        setMsg("✅ Dados sincronizados!");
         setLoading(false);
-        setTimeout(() => setProgress(0), 2000);
-      }, 3000);
+        setTimeout(() => setProgress(0), 3000);
+      }, 120000);
 
     } catch (err) {
       setMsg("⚠️ Erro na sincronização");
@@ -99,6 +104,7 @@ const Dashboard = () => {
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw", overflow: "hidden", backgroundColor: "#0d1117", fontFamily: "sans-serif" }}>
       
+      {/* SIDEBAR */}
       <aside style={{ 
         width: "280px", minWidth: "280px", height: "100%", backgroundColor: "#161b22", 
         borderRight: "1px solid #30363d", display: "flex", flexDirection: "column", padding: "20px", boxSizing: "border-box" 
@@ -151,8 +157,8 @@ const Dashboard = () => {
         <div style={{ paddingTop: "20px", borderTop: "1px solid #30363d", display: "flex", flexDirection: "column", gap: "8px" }}>
           
           {progress > 0 && (
-            <div style={{ width: "100%", height: "4px", backgroundColor: "#30363d", borderRadius: "2px", marginBottom: "8px", overflow: "hidden" }}>
-              <div style={{ width: `${progress}%`, height: "100%", backgroundColor: "#238636", transition: "width 0.4s linear" }}></div>
+            <div style={{ width: "100%", height: "6px", backgroundColor: "#30363d", borderRadius: "3px", marginBottom: "4px", overflow: "hidden" }}>
+              <div style={{ width: `${progress}%`, height: "100%", backgroundColor: "#238636", transition: "width 1s linear" }}></div>
             </div>
           )}
 
@@ -172,15 +178,7 @@ const Dashboard = () => {
             {loading && progress > 0 ? "Sincronizando..." : "🔄 Recarregar e Atualizar PBIX"}
           </button>
 
-          {/* OBSERVAÇÃO FIXA ADICIONADA AQUI */}
-          <p style={{ 
-            fontSize: "10px", 
-            color: "#8b949e", 
-            textAlign: "center", 
-            margin: "8px 0 0 0", 
-            fontStyle: "italic",
-            lineHeight: "1.2"
-          }}>
+          <p style={{ fontSize: "10px", color: "#8b949e", textAlign: "center", margin: "8px 0 0 0", fontStyle: "italic", lineHeight: "1.2" }}>
             O processo de filtragem leva de 1 até no máximo 3 minutos.
           </p>
           
@@ -188,15 +186,17 @@ const Dashboard = () => {
         </div>
       </aside>
 
+      {/* ÁREA DO RELATÓRIO */}
       <main style={{ flex: 1, height: "100%", backgroundColor: "#fff", display: "flex", flexDirection: "column", overflow: "hidden" }}>
         <iframe
           key={refreshKey}
-          title="Mercado Abilhão"
+          title="Mercado Abilhão - Matriz 33429648000137"
           src={urlBI}
           style={{ width: "100%", height: "100%", border: "none" }}
           allowFullScreen={true}
         ></iframe>
       </main>
+
     </div>
   );
 };
