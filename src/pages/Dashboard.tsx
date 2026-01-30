@@ -43,7 +43,7 @@ const Dashboard = () => {
       backgroundColor: "#0d1117" 
     }}>
       
-      {/* SIDEBAR FIXA - Não quebra mais o layout */}
+      {/* SIDEBAR FIXA */}
       <aside style={{ 
         width: "260px", 
         minWidth: "260px", 
@@ -93,7 +93,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* RODAPÉ COM BOTÕES - Distância e Divisória Ajustadas */}
+        {/* RODAPÉ COM BOTÕES */}
         <div style={{ 
           paddingTop: "20px", 
           borderTop: "1px solid #30363d", 
@@ -129,7 +129,7 @@ const Dashboard = () => {
               fontWeight: "bold", 
               cursor: "pointer", 
               fontSize: "12px",
-              marginTop: "4px" // Distância extra entre os botões
+              marginTop: "4px"
             }}
           >
             🔄 Recarregar Relatório
@@ -139,24 +139,25 @@ const Dashboard = () => {
         </div>
       </aside>
 
-      {/* ÁREA DO RELATÓRIO - Preenchimento total e isolado */}
+      {/* ÁREA DO RELATÓRIO - Ajustada para não sobrepor as abas nativas */}
       <main style={{ 
         flex: 1, 
         height: "100%", 
-        backgroundColor: "#000",
-        position: "relative"
+        backgroundColor: "#0d1117", 
+        padding: "10px 10px 35px 10px", // Padding inferior maior (35px) para dar espaço às abas do BI
+        boxSizing: "border-box",
+        display: "flex"
       }}>
         <iframe
           key={refreshKey}
           title="Mercado Abilhão"
           src={urlBI}
           style={{ 
-            position: "absolute",
-            top: 0,
-            left: 0,
             width: "100%", 
             height: "100%", 
-            border: "none"
+            border: "none",
+            borderRadius: "4px",
+            backgroundColor: "#fff" // Fundo branco evita "flicker" visual
           }}
           allowFullScreen={true}
         ></iframe>
